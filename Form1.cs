@@ -509,10 +509,10 @@ namespace WindowsFormsApplication1
                 bw.ReportProgress(0, "progress_total");
                 string innerZip = "innerZip.zip";
                 int cnt = 0;
-                //foreach (string zipFileName_X in files)
+                foreach (string zipFileName_X in files)
                 {
                     doctypeEntity = new Hashtable();
-                    //zipFileName = zipFileName_X;
+                    zipFileName = zipFileName_X;
                     isAirbus = false;
                     string sbFilenName = Path.GetFileNameWithoutExtension(zipFileName);
                     isAirbus = Regex.Match(sbFilenName, @"SB_.+_r\d{1,}").Success;
@@ -737,10 +737,10 @@ namespace WindowsFormsApplication1
                         }
                         #endregion
                         
-                        //if (refresh)
+                        if (refresh)
                         {
                             #region Parse Data
-                            if (Directory.Exists(activeSb_dir) && !refresh)
+                            if (Directory.Exists(activeSb_dir) && refresh)
                             {
                             isFileDeleted:
                                 #region MyRegion
@@ -762,7 +762,7 @@ namespace WindowsFormsApplication1
                             else
                             {
                                 getSbMeta();
-                                //continue;
+                                continue;
                             }
 
                             #region MyRegion
@@ -2842,9 +2842,11 @@ namespace WindowsFormsApplication1
                 {
                     match = reader.ReadToDescendant("list1");
                 }
+
+
                 if (match)
                 {
-                    while (reader.Name == "list1")
+                    while (match && reader.IsStartElement())
                     {
                         string key = "wicpart_" + wic_part.ToString() + ".xml";
                         data = (reader.ReadOuterXml());
@@ -2855,6 +2857,7 @@ namespace WindowsFormsApplication1
                             sw.Close();
                         }
                         wic_part++;
+                        match = reader.ReadToNextSibling("list1");
                     }
                 }
                 else
